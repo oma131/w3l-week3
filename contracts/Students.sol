@@ -2,10 +2,13 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-contract Students{
+contract StudentDatabase{
+    uint public Counter = 0;
+    address public owner;
+    uint256[] addStudent;
 
-    // sturct of students data. The variables inside the struct are state variables.
-    struct StudentData{
+    // stuct of students data. The variables inside the struct are state variables.
+    struct Student{
         uint256 studentId;
         string name;
         uint256 age;
@@ -15,60 +18,60 @@ contract Students{
         bool  isPromoted;
     }
 
-    StudentData []student;
+    mapping (uint256 => Student) students;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner {
+        require(
+            msg.sender == owner,
+            "caller is not the owner"
+        );
+        _;
+    }
+
 
     //A function that adds a new students data to the list
     //The memory keyword is used to store data temporarily
     function addStudentData(
         uint256 studentId,
-        string memory name,
-        uint256 age,
-        uint256 level,
-        string memory department,
-        uint256 grade,
-        bool  isPromoted
-    ) public{
-        StudentData memory n = StudentData(studentId,
-            name,
-            age,
-            level,
-            department,
-            grade,
-            isPromoted
-        );
-        student.push(n);
+        string memory _name,
+        uint256 _age,
+        uint256 _level,
+        string memory _department,
+        uint256 _grade,
+        bool  _isPromoted
+    ) public returns(bool success) {
+        students[studentId].name = _name;
+        students[studentId].age = _age;
+        students[studentId].level = _level;
+        students[studentId].department = _department;
+        students[studentId].grade = _grade;
+        students[studentId].isPromoted= _isPromoted;
+
+        Counter = Counter + 1;
+
+        addStudent.push(studentId);
+        return true;
+        
     }
 
     // Function that gets the students data inputed
-    function getStudentData( uint256 studentId) public view returns(
-        string memory,
-        uint256,
-        uint256,
-        string memory,
-        uint256,bool
+    function getStudentData( uint256 studentId) public onlyOwner view returns(
+        string memory, uint256, uint256, string memory, uint256,bool
     ) {
-            uint i;
-            for(i = 0; i < student.length; i++)
-            {
-                StudentData memory n = student[i];
-                
-                if(n.studentId == studentId)
-                {
-                    return(n.name,
-                        n.age,
-                        n.level,
-                        n.department,
-                        n.grade,
-                        n.isPromoted);
-                }
-            }   
-	
-            // If student data not found return "not found", 0, false
-            return("Not Found",
-                0,
-                0,
-                "Not Found",
-                0,
-                false);
+
+            return(
+                students[studentId].name,
+                students[studentId].age,
+                students[studentId].level,
+                students[studentId].department,
+                students[studentId].grade,
+                students[studentId].isPromoted
+
+            );
         }
+             
 }

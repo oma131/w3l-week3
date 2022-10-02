@@ -26,3 +26,5 @@ This project demonstrates a smart contract that records database of students in 
 
 - **Read Function:** This is a function that can only get data that is stored.
 - **Write Function:** This is a function that can take in data. Data can be inputed into them.
+
+**Deployed Adress -  0xBB047A27bd0885bfce74A5EaaaA39199543096A0**
