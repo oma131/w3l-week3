@@ -52,8 +52,6 @@ contract Students{
             {
                 StudentData memory n = student[i];
                 
-                // Looks for a matching
-                // employee id
                 if(n.studentId == studentId)
                 {
                     return(n.name,
